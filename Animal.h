@@ -19,6 +19,31 @@ enum Gender { UNKNOWN_GENDER = 0, MALE = 1, FEMALE = 2 };
 const float UNKNOWN_WEIGHT = -1;
 
 class Animal {
+public:
+    Animal(const std::string &newSpecies);
+
+    Animal(const std::string &species, Gender gender);
+
+    Animal(const std::string &species, Gender gender, float weight);
+
+    Animal(const std::string &species, float weight);
+
+    static const std::string &getKingdom();
+
+    const std::string &getSpecies() const;
+
+    Gender getGender() const;
+
+    void setGender(Gender gender);
+
+    float getWeight() const;
+
+    void setWeight(float weight);
+
+    void printInfo();
+
+    bool isValid();
+
 protected:
     static const std::string kingdom;
     std::string species; //Required
