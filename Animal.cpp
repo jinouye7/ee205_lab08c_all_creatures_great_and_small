@@ -9,6 +9,7 @@
 /// @date   08_Mar_2022
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <iostream>
 #include "Animal.h"
 
 using namespace std;
@@ -16,16 +17,21 @@ using namespace std;
 const string Animal::kingdom = "Animalia";
 
 Animal::Animal(const string &newSpecies) : species(newSpecies) {
-    Animal::species = newSpecies;
+    setSpecies( newSpecies );
 }
 //constructor for species and gender
-Animal::Animal(const string &species, Gender gender) : species(species), gender(gender) {}
-
-//constructor for species, gender, and weight
-Animal::Animal(const string &species, Gender gender, float weight) : species(species), gender(gender), weight(weight) {}
-
-//constructor for species, and weight
-Animal::Animal(const string &species, float weight) : species(species), weight(weight) {}
+Animal::Animal(const string &newSpecies, Gender gender) : species(newSpecies), gender(gender) {
+    setSpecies( newSpecies );
+}
+//constructor for species, gender, and newWeight
+Animal::Animal(const string &newSpecies, Gender gender, float newWeight) : species(newSpecies), gender(gender), weight(newWeight) {
+    setWeight(newWeight);
+    setSpecies( newSpecies );
+}
+//constructor for species, and newWeight
+Animal::Animal(const string &species, float newWeight) : species(species), weight(newWeight) {
+    setWeight(newWeight);
+}
 
 
 const string &Animal::getKingdom() {
@@ -40,22 +46,60 @@ Gender Animal::getGender() const {
     return gender;
 }
 
-void Animal::setGender(Gender gender) {
-    Animal::gender = gender;
+void Animal::setGender(Gender newGender) {
+    if(gender != UNKNOWN_GENDER && newGender != UNKNOWN_GENDER ) {
+        throw logic_error("Previous gender must be UNKNOWN_GENDER");
+
+    }
+    Animal::gender = newGender;
 }
 
 float Animal::getWeight() const {
     return weight;
 }
 
-void Animal::setWeight(float weight) {
+void Animal::setWeight(float newWeight) {
+    if( !validateWeight(newWeight)){
+        throw invalid_argument("weight must be > 0");
+    }
     Animal::weight = weight;
 }
 
 void Animal::printInfo() {
-
+    cout << "Animal Fields" << endl;
+    cout << " Kingdom = [" << getKingdom() << "]" << endl;
+    cout << " Species = [" << getSpecies() << "]" << endl;
+    cout << " Weight = [" << getWeight() << "]" << endl;
+    cout << " Gender = [" << getGender() << "]" << endl;
 }
 
 bool Animal::isValid() {
+    if( !validateWeight(weight))
+        return false;
+
     return false;
+}
+
+bool Animal::validateWeight(const float newWeight) {
+    if( newWeight == UNKNOWN_WEIGHT )
+        return true;
+    if( newWeight > 0 )
+        return true;
+
+    //all other cases return false
+    return false;
+}
+
+bool Animal::validateSpecies(const std::string newSpecies) {
+    if( newSpecies.empty())
+        return false;
+
+    return true;
+}
+
+void Animal::setSpecies(const std::string newSpecies) {
+    if( !validateSpecies( newSpecies ))
+        throw invalid_argument("A species can't be empty.");
+
+    Animal::species = newSpecies ;
 }
